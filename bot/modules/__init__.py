@@ -38,6 +38,8 @@ from .stats import bot_stats, stats_pages, get_packages_version
 from .status import task_status, status_pages
 from .users_settings import get_users_settings, edit_user_settings, send_user_settings
 from .ytdlp import ytdl, ytdl_leech
+from .speedtest import speedtest
+from .telegraph_upload import telegraph_upload
 
 __all__ = [
     "send_bot_settings",
@@ -95,6 +97,37 @@ __all__ = [
     "run_shell",
     "bot_stats",
     "stats_pages",
+    "mirror",
+    "leech",
+    "qb_leech",
+    "qb_mirror",
+    "jd_leech",
+    "jd_mirror",
+    "nzb_leech",
+    "nzb_mirror",
+    "restart_bot",
+    "restart_notification",
+    "confirm_restart",
+    "restart_sessions",
+    "imdb_search",
+    "imdb_callback",
+    "get_rss_menu",
+    "rss_listener",
+    "torrent_search",
+    "torrent_search_update",
+    "initiate_search_tools",
+    "start",
+    "start_cb",
+    "login",
+    "bot_help",
+    "mediainfo",
+    "broadcast",
+    "ping",
+    "log",
+    "log_cb",
+    "run_shell",
+    "bot_stats",
+    "stats_pages",
     "get_packages_version",
     "task_status",
     "status_pages",
@@ -103,4 +136,6 @@ __all__ = [
     "send_user_settings",
     "ytdl",
     "ytdl_leech",
+    "speedtest",
+    "telegraph_upload",
 ]

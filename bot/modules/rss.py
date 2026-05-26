@@ -604,7 +604,7 @@ Timeout: 60 sec. Argument -c for command and arguments
             async with rss_dict_lock:
                 for user in list(rss_dict.keys()):
                     for title in list(rss_dict[user].keys()):
-                        rss_dict[int(data[2])][title]["paused"] = True
+                        rss_dict[user][title]["paused"] = True
             if scheduler.running:
                 scheduler.pause()
             await database.rss_update_all()
@@ -612,7 +612,7 @@ Timeout: 60 sec. Argument -c for command and arguments
             async with rss_dict_lock:
                 for user in list(rss_dict.keys()):
                     for title in list(rss_dict[user].keys()):
-                        rss_dict[int(data[2])][title]["paused"] = False
+                        rss_dict[user][title]["paused"] = False
             if scheduler.state == 2:
                 scheduler.resume()
             elif not scheduler.running:

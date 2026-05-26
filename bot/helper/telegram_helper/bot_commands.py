@@ -46,11 +46,13 @@ class BotCommands:
         "UnAuthorize": ["unauthorize", "ua"],
         "AddSudo": ["addsudo", "as"],
         "RmSudo": ["rmsudo", "rs"],
-        "BotSet": ["bsetting", "bs"],
-        "UserSet": ["usetting", "us"],
+        "BotSet": ["set", "bsetting", "bs"],
+        "UserSet": ["uset", "usetting", "us"],
         "Select": ["select", "sel"],
         "NzbSearch": ["nzbsearch", "ns"],
         "Plugins": "plugins",
+        "SpeedTest": ["speedtest", "stest"],
+        "Telegraph": ["tg", "telegraph"],
     }
 
     @classmethod
@@ -62,14 +64,7 @@ class BotCommands:
             for plugin_info in plugin_manager.list_plugins():
                 if plugin_info.enabled and plugin_info.commands:
                     for cmd in plugin_info.commands:
-                        if cmd == "speedtest":
-                            commands["SpeedTest"] = ["speedtest", "stest"]
-                        elif cmd == "stest":
-                            if "SpeedTest" not in commands:
-                                commands["SpeedTest"] = ["speedtest", "stest"]
-                            elif "stest" not in commands["SpeedTest"]:
-                                commands["SpeedTest"].append("stest")
-
+                        pass
         return commands
 
     @classmethod

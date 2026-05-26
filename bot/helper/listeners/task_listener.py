@@ -433,7 +433,11 @@ class TaskListener(TaskConfig):
 
             await send_message(self.user_id, msg, button)
             if Config.LEECH_DUMP_CHAT:
-                await send_message(int(Config.LEECH_DUMP_CHAT), msg, button)
+                try:
+                    dump_chat = int(Config.LEECH_DUMP_CHAT)
+                except (ValueError, TypeError):
+                    dump_chat = Config.LEECH_DUMP_CHAT
+                await send_message(dump_chat, msg, button)
             await send_message(self.message, user_message, button)
 
         elif self.is_leech:

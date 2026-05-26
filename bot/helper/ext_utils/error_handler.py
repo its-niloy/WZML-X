@@ -204,9 +204,10 @@ def circuit_breaker(
     operation: str, failure_threshold: int = 5, recovery_timeout: int = 60
 ):
     def decorator(func: Callable) -> Callable:
+        cb = CircuitBreaker(failure_threshold, recovery_timeout)
+
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            cb = CircuitBreaker(failure_threshold, recovery_timeout)
             if not cb.can_execute():
                 raise Exception(f"Circuit breaker open for {operation}")
 

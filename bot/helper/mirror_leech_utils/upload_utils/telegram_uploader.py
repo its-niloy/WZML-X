@@ -141,7 +141,8 @@ class TelegramUploader:
                                 leech_dest, _ = str(leech_dest).split("|", 1)
                             if leech_dest.lstrip("-").isdigit():
                                 leech_dest = int(leech_dest)
-                        await self._log_msg.copy(chat_id=leech_dest)
+                        if self._log_msg.chat.id != leech_dest:
+                            await self._log_msg.copy(chat_id=leech_dest)
                     except Exception as e:
                         if not self._listener.is_cancelled:
                             LOGGER.error(
@@ -204,7 +205,11 @@ class TelegramUploader:
             )
             up_path = ospath.join(dirpath, pre_file_)
             dur, qual, lang, subs = await get_media_info(up_path, True)
-            cap_mono = parts[0].format(
+            class SafeDict(dict):
+                def __missing__(self, key):
+                    return f"{{{key}}}"
+
+            cap_mono = parts[0].format_map(SafeDict(
                 filename=cap_file_,
                 size=get_readable_file_size(await aiopath.getsize(up_path)),
                 duration=get_readable_time(dur),
@@ -215,7 +220,7 @@ class TelegramUploader:
                 mime_type=self._listener.file_details.get("mime_type", "text/plain"),
                 prefilename=self._listener.file_details.get("filename", ""),
                 precaption=self._listener.file_details.get("caption", ""),
-            )
+            ))
 
             for part in parts[1:]:
                 args = part.split(":")
@@ -265,6 +270,10 @@ class TelegramUploader:
                 input_media = InputMediaVideo(
                     media=msg.video.file_id, caption=msg.caption
                 )
+            elif key == "audios" and msg.audio:
+                input_media = InputMediaDocument(
+                    media=msg.audio.file_id, caption=msg.caption
+                )
             else:
                 input_media = InputMediaDocument(
                     media=msg.document.file_id, caption=msg.caption
@@ -279,7 +288,7 @@ class TelegramUploader:
         ]
         for i in range(0, len(inputs), 10):
             batch = inputs[i : i + 10]
-            if Config.BOT_PM:
+            if Config.BOT_PM and self._sent_msg.chat.id != self._listener.user_id:
                 await TgClient.bot.send_media_group(
                     chat_id=self._listener.user_id,
                     media=batch,
@@ -320,7 +329,7 @@ class TelegramUploader:
 
     async def _copy_media(self):
         try:
-            if self._bot_pm:
+            if self._bot_pm and self._sent_msg.chat.id != self._listener.user_id:
                 await TgClient.bot.copy_message(
                     chat_id=self._listener.user_id,
                     from_chat_id=self._sent_msg.chat.id,
@@ -601,11 +610,12 @@ class TelegramUploader:
                                 leech_dest, _ = str(leech_dest).split("|", 1)
                             if leech_dest.lstrip("-").isdigit():
                                 leech_dest = int(leech_dest)
-                        await TgClient.bot.copy_message(
-                            chat_id=leech_dest,
-                            from_chat_id=self._sent_msg.chat.id,
-                            message_id=self._sent_msg.id,
-                        )
+                        if self._sent_msg.chat.id != leech_dest:
+                            await TgClient.bot.copy_message(
+                                chat_id=leech_dest,
+                                from_chat_id=self._sent_msg.chat.id,
+                                message_id=self._sent_msg.id,
+                            )
                     except Exception as e:
                         if not self._listener.is_cancelled:
                             LOGGER.error(

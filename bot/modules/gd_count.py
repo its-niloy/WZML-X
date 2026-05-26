@@ -12,7 +12,7 @@ async def count_node(_, message):
     if username := user.username:
         tag = f"@{username}"
     else:
-        tag = message.from_user.mention
+        tag = user.mention if hasattr(user, 'mention') else user.title
 
     link = args[1] if len(args) > 1 else ""
     if len(link) == 0 and (reply_to := message.reply_to_message):

@@ -285,7 +285,8 @@ async def pre_task_check(message):
         msg.append(token_msg)
 
     if msg:
-        username = message.from_user.mention
+        _user = message.from_user or message.sender_chat
+        username = _user.mention if hasattr(_user, 'mention') else _user.title
         final_msg = f"⌬ <b>Task Checks :</b>\n│\n┟ <b>Name</b> → {username}\n┃\n"
         for i, m_part in enumerate(msg, 1):
             final_msg += f"{m_part}\n"

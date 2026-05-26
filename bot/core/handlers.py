@@ -371,6 +371,20 @@ def add_handlers():
             & CustomFilters.authorized,
         )
     )
+    TgClient.bot.add_handler(
+        MessageHandler(
+            speedtest,
+            filters=command(BotCommands.SpeedTestCommand, case_sensitive=True)
+            & CustomFilters.authorized,
+        )
+    )
+    TgClient.bot.add_handler(
+        MessageHandler(
+            telegraph_upload,
+            filters=command(BotCommands.TelegraphCommand, case_sensitive=True)
+            & CustomFilters.authorized,
+        )
+    )
     if Config.SET_COMMANDS:
         global BOT_COMMANDS
 

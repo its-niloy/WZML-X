@@ -410,6 +410,8 @@ def get_bot_commands():
         "Log": "[SUDO] Get Bot Logs for Internal Working",
         "Restart": "[SUDO] Reboot bot",
         "RestartSessions": "[SUDO] Reboot User Sessions",
+        "SpeedTest": "Check Bot Speed using Speedtest.com",
+        "Telegraph": "[reply] Upload Image/Video (under 5MB) to Telegraph",
     }
 
     commands = static_commands.copy()
@@ -419,8 +421,7 @@ def get_bot_commands():
         for plugin_info in plugin_manager.list_plugins():
             if plugin_info.enabled and plugin_info.commands:
                 for cmd in plugin_info.commands:
-                    if cmd == "speedtest":
-                        commands["SpeedTest"] = "Check Bot Speed using Speedtest.com"
+                    pass
 
     return commands
 
@@ -447,6 +448,8 @@ def get_help_string():
 
         if key == "SpeedTest" and key in BOT_COMMANDS:
             help_lines.append(f"{cmd_str}: Check Bot Speed using Speedtest.com")
+        elif key == "Telegraph" and key in BOT_COMMANDS:
+            help_lines.append(f"{cmd_str}: Upload Image/Video (under 5MB) to Telegraph.")
         elif key == "Mirror":
             help_lines.append(f"{cmd_str}: Start mirroring to cloud.")
         elif key == "QbMirror":

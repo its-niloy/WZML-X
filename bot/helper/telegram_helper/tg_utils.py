@@ -35,6 +35,8 @@ async def forcesub(message, ids, button=None):
     for channel_id in ids.split():
         chat = await chat_info(channel_id)
         try:
+            if message.from_user is None:
+                continue
             await chat.get_member(message.from_user.id)
         except UserNotParticipant:
             if username := chat.username:
@@ -63,6 +65,8 @@ async def user_info(user_id):
 
 
 async def check_botpm(message, button=None):
+    if message.from_user is None:
+        return None, button
     try:
         await TgClient.bot.send_chat_action(message.from_user.id, ChatAction.TYPING)
         return None, button
