@@ -33,10 +33,15 @@ async def telegraph_upload(_, message):
 
         await edit_message(msg, "<i>Uploading to Telegraph...</i>")
         
+        import mimetypes
+        mime_type, _ = mimetypes.guess_type(file_path)
+        if not mime_type:
+            mime_type = 'image/jpeg'
+        
         async with aiohttp.ClientSession() as session:
             with open(file_path, 'rb') as f:
                 data = aiohttp.FormData()
-                data.add_field('file', f, filename=os.path.basename(file_path))
+                data.add_field('file', f, filename=os.path.basename(file_path), content_type=mime_type)
                 
                 async with session.post('https://telegra.ph/upload', data=data) as response:
                     res_json = await response.json()
